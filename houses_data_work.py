@@ -67,12 +67,48 @@ print(houses_copy['state of the building'].unique())
 
 
 # how many nulls in the column area, what to do with the null values?
-print(houses_copy['area'].isnull().sum())
+# print(houses_copy['area'].isnull().sum())
 # print(houses_copy['area'].value_counts(normalize=True) * 100)
 
+# amount nulls in state of the building, not that important
+# convert to numbers to be able to see correlation / plot
+print(houses_copy['state of the building'].isnull().sum())
 
 # how many nulls in the column state of the building
 # print(houses_copy['state of the building'].isnull().sum())
+
+# KEEP THIS PLOT: shows the impact of state of the building on house price
+# sns.lmplot(x='price', y='area',data=houses_copy, hue='state of the building', fit_reg=False)
+# sns.lmplot(x='price', y='area',data=houses_copy, hue='state of the building')
+
+# g = sns.catplot(x='price',
+#                 y='area',
+#                 data=houses_copy,
+#                 hue='state of the building')  # Color by stage
+#                 # col='Stage',  # Separate by stage
+#                 # kind='swarm') # Swarmplot
+
+
+# facades not that important on price
+# sns.lmplot(x='price', y='number of facades',data=houses_copy)
+
+# bedrooms: not the most important one, but it seems to have some impact, up to five rooms
+# sns.lmplot(x='price', y='number of bedrooms',data=houses_copy)
+
+#
+# sns.lmplot(x='locality', y='price',data=houses_copy, hue='state of the building')
+# sns.catplot(x='locality', y='price',
+#             data=houses_copy,
+#             hue='state of the building',
+#             col='state of the building',
+#             kind='swarm')
+
+# sns.swarmplot(x='price', y='locality', data=houses_copy,
+#               hue='state of the building')
+
+# sns.barplot(x='locality', y='price', data=houses_copy, hue='state of the building')
+
+# sns.lmplot(x='fully equipped kitchen', y='state of the building',data=houses_copy)
 
 # percentage of the values
 # print(houses_copy['state of the building'].value_counts(normalize=True) * 100)
@@ -84,10 +120,10 @@ print(houses_copy['area'].isnull().sum())
 
 
 # max prices by area
-print(houses_copy.groupby('area').price.agg(['max']))
+# print(houses_copy.groupby('area').price.agg(['max']))
 
 
 # correlation heatmap
-corr = houses_copy.corr()
-sns.heatmap(corr)
+# corr = houses_copy.corr()
+# sns.heatmap(corr)
 plt.show()
