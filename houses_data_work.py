@@ -50,4 +50,8 @@ houses_copy[columns_to_strip].apply(lambda x: x.str.strip())  # TODO x
 
 # # houses_copy.to_numeric(houses_copy['price'])
 houses_copy = houses_copy.convert_dtypes()
+houses_copy["price"] = houses_copy.drop(houses_copy.index[houses_copy["price"] == "no"], inplace=True)
+# [13:36]
+houses_copy.price = houses_copy.price.astype(float)
+
 houses_copy.info()
