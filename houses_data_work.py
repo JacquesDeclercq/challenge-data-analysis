@@ -1,8 +1,11 @@
 import pandas as pd
 import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 path = 'Dataset\\final_list_houses_dataset.csv'
 houses_data = pd.read_csv(path, sep=',')
+
 
 # copy dataframe
 houses_copy = houses_data.copy()
@@ -39,6 +42,7 @@ columns_to_strip = ['state of the building',
                     'type of property',
                     'subtype of property']
 houses_copy[columns_to_strip].apply(lambda x: x.str.strip())  # TODO x
+
 #
 # print(houses_copy[columns_to_strip])
 #
@@ -58,3 +62,32 @@ houses_copy.info()
 
 print(houses_copy.price)
 print(np.where(pd.isnull(houses_copy.price)))
+
+print(houses_copy['state of the building'].unique())
+
+
+# how many nulls in the column area, what to do with the null values?
+print(houses_copy['area'].isnull().sum())
+# print(houses_copy['area'].value_counts(normalize=True) * 100)
+
+
+# how many nulls in the column state of the building
+# print(houses_copy['state of the building'].isnull().sum())
+
+# percentage of the values
+# print(houses_copy['state of the building'].value_counts(normalize=True) * 100)
+# print(houses_copy.head())
+# print(houses_copy.tail())
+# houses_pairplot = sns.pairplot(houses_copy)
+
+
+
+
+# max prices by area
+print(houses_copy.groupby('area').price.agg(['max']))
+
+
+# correlation heatmap
+corr = houses_copy.corr()
+sns.heatmap(corr)
+plt.show()
