@@ -9,16 +9,11 @@ path = 'Dataset\\final_list_houses_dataset.csv'
 houses_data = pd.read_csv(path, sep=',')
 # copy dataframe
 houses_copy = houses_data.copy()
-# print(houses_copy.columns)
 print(houses_copy.columns)
 houses_copy = houses_copy.drop(columns=['Unnamed: 0',
                                         'open fire',
                                         'type of property'])
-print(houses_copy.columns)
-                                        # 'type of property',
-                                        # 'open fire'])
-# del houses_copy[houses_copy['type of property']]
-# houses_copy = houses_copy.drop(columns='open fire')
+
 
 def make_postal_code_second_attempt(df):
     # Create column "province"
@@ -144,10 +139,10 @@ def strip_strings(df):
     df[columns_to_strip].apply(lambda x: x.str.strip())  # TODO x
 
 
-def convert_price_from_string_to_int(df):
+def convert_price_from_string_to_float(df):
     # convert columns dtypes
     df.drop(houses_copy.index[houses_copy["price"] == "no"], inplace=True)
-    df.price = houses_copy.price.astype(int)
+    df.price = houses_copy.price.astype(float)
     return df.price
 
 
@@ -171,74 +166,26 @@ def show_lmplot(x_value, y_value, data_value, hue_value):
     plt.show()
 
 
+def add_price_per_square_meter(df):
+    calculation = df['price'] / df['area']
+    df['price_meter'] = calculation
+    return df
+
+
 houses_copy = rename_column_titles(houses_copy)
 # houses_copy = make_postal_code_qualitative_value(houses_copy)
 houses_copy = add_cities_provinces_to_dataset(houses_copy)
-# houses_copy.info()
-
-
-# houses_copy = make_postal_code_second_attempt(houses_copy)
-# print(houses_copy.head())
-
-# print(houses_copy.columns)
-# print(houses_copy['province'].head())
-# print(print_column_values(houses_copy, 'province'))
-# print(houses_copy.tail())
-# print(houses_copy.columns)
-# print(houses_copy.groupby('province').count())
-# print_duplicate_houses(houses_copy)
 houses_copy = drop_duplicate_columns(houses_copy)
 strip_strings(houses_copy)
-convert_price_from_string_to_int(houses_copy)
-# houses_copy.info()
-# print(houses_copy.price)
-# print(np.where(pd.isnull(houses_copy.price)))
-# print_column_values(houses_copy, 'state of the building')
-# print_column_na_count(houses_copy, 'state of the building')
+convert_price_from_string_to_float(houses_copy)
+houses_copy = add_price_per_square_meter(houses_copy)
+
 
 # print_column_values(houses_copy, 'area')
 # print_column_na_count(houses_copy, 'area')
 # print_ratio_without_null(houses_copy, 'area')
-
-# amount nulls in state of the building, not that important. Or graph shows otherwise
-# KEEP THIS PLOT: shows the impact of state of the building on house price
-# show_lmplot('price', 'area', houses_copy, 'state of the building')
-
-# sns.pairplot(houses_copy)
-
-# facades not that important on price
-# sns.lmplot(x='price', y='number of facades',data=houses_copy)
-
-# bedrooms: not the most important one, but it seems to have some impact, up to five rooms
-# sns.lmplot(x='price', y='number of bedrooms',data=houses_copy)
-
-# work locality first
-# sns.barplot(x='locality', y='price', data=houses_copy, hue='state of the building')
-# sns.lmplot(x='fully equipped kitchen', y='state of the building',data=houses_copy)
-
-# print(houses_copy['subtype of property'].unique())
-
 # percentage of the values
 # print(houses_copy['state of the building'].value_counts(normalize=True) * 100)
-# print(houses_copy.head())
-# print(houses_copy.tail())
-# houses_pairplot = sns.pairplot(houses_copy)
-
-# print(houses_copy[['subtype of property']].value_counts())
-
-
-# max prices by area
-# print(houses_copy.groupby('area').price.agg(['max']))
-
-
-# correlation heatmap
-# corr = houses_copy.corr()
-# sns.heatmap(corr)
-# plt.show()
-
-# print(houses_copy.dtypes)
-
-# houses_copy = houses_copy[houses_copy['subtype of property'] == 'house']
 
 ############### KEEP HOUSES ################
 subtype_house_copy = houses_copy[houses_copy['subtype of property'] == 'house']
@@ -259,7 +206,6 @@ def show_heatmap_subtypehouse():
     sns.heatmap(corr)
     plt.show()
 
-# show_heatmap_subtypehouse()
 
 def plot_price_by_area(x_val, y_val, data_val, hue_val):
     sns.lmplot(x=x_val, y=y_val, data=data_val, hue=hue_val)
@@ -296,7 +242,39 @@ def show_barplot_stats():
                   y='province',
                   data=subtype_house_copy)
 
-# show_barplot_stats()
+def show_barplot_typeofsubproperty_absoluteprice():
+    list_properties = ['house', 'apartment', 'villa']
+    copy_df = houses_copy[houses_copy['subtype of property'].isin(list_properties)]
+    sns.barplot(x='region', y='price', data=copy_df, hue="subtype of property", palette="Blues")
+    # ax.set_xticklabels(["Appartment", "House"])
+    # plt.xlabel("Type of property")
+    # plt.ylabel("Price")
+    plt.show()
+
+def show_barplot_typeofsubproperty_pricespermeter():
+    #price based on type of property and region
+    # ax = plt.subplot()
+    list_properties = ['house', 'apartment', 'villa']
+    copy_df = houses_copy[houses_copy['subtype of property'].isin(list_properties)]
+    sns.barplot(x='region', y='price_meter', data=copy_df, hue="subtype of property", palette="Blues")
+    # ax.set_xticklabels(["Appartment", "House"])
+    # plt.xlabel("Type of property")
+    # plt.ylabel("Price")
+    plt.show()
 
 
-# print(houses_copy.locality)
+def calculate_min_price_per_meter():
+    list_properties = ['house', 'apartment', 'villa']
+    copy_df = houses_copy[houses_copy['subtype of property'].isin(list_properties)]
+
+
+    copy_df = copy_df.sort_values('price_meter', ascending=False)
+    max = copy_df['price_meter'].head()
+    print(copy_df)
+    print(max)
+
+    # max prices by area
+    # print(houses_copy.groupby('area').price.agg(['max']))
+
+
+calculate_min_price_per_meter()
