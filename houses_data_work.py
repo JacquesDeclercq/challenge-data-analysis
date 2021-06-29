@@ -5,89 +5,141 @@ import matplotlib.pyplot as plt
 
 path = 'Dataset\\final_list_houses_dataset.csv'
 houses_data = pd.read_csv(path, sep=',')
-
-
 # copy dataframe
 houses_copy = houses_data.copy()
-houses_copy = houses_copy.rename(columns={'Price [€]':'price',
-                                          'Area [m²]': 'area',
-                                          'locality [zip code]':'locality',
-                                          'surface of the land [m²]':'surface of the land',
-                                          'terrace surface [m²]':'terrace surface',
-                                          'garden surface [m²]':'garden surface'})
-
-print(houses_copy.columns)
-
-# drop duplicates
-# print(houses_copy.duplicated().value_counts())
-# print(houses_copy.duplicated([  'locality',
-#                                 'price',
-#                                 'number of bedrooms',
-#                                 'surface of the land']).value_counts())
-
-# choice of columns to decide which properties are duplicates
-houses_copy = houses_copy.drop_duplicates(subset = ['locality',
-                                'price',
-                                'number of bedrooms',
-                                'surface of the land'], keep=False)
-
-
 houses_copy = houses_copy.drop(columns='Unnamed: 0')
-# print(houses_copy['number of facades'])
+
+
+def make_postal_code_qualitative_value(dataframe):
+    # Create column "province"
+    dataframe["province"] = np.nan
+
+    df = dataframe.sort_values('locality')
+
+    for row in df['locality']:
+
+    # for index, row in df.iterrows():
+        if df.loc[row, 'locality'] >= 1000 & df.loc[row, 'locality'] <= 1299:
+            df.loc[row, "province"] = "Brussels-Capital"
+
+        # if df[row['locality']] >= 1000 & df[row['locality']] <= 1299:
+        #     df[row['province']] = "Brussels-Capital"
+
+        elif df.loc[row, 'locality']>= 1300 & df.loc[row, "locality"] <= 1499:
+            df.loc[row, "province"] = "Walloon Brabant"
+        elif df.loc[row, 'locality']>= 1500 & df.loc[row, "locality"] <= 1999:
+            df.loc[row, "province"] = "Flemish Brabant"
+        # elif (row["locality"] >= 2000 & row["locality"] <= 2999):
+        #     row["province"] = "Antwerp"
+        # elif (row["locality"] >= 3000 & row["locality"] <= 3499):
+        #     row["province"] = "Flemish Brabant"
+        # elif (row["locality"] >= 3500 & row["locality"] <= 3999):
+        #     row["province"] = "Limburg"
+        # elif (row["locality"] >= 4000 & row["locality"] <= 4999):
+        #     row["province"] = "Liège"
+        # elif (row["locality"] >= 5000 & row["locality"] <= 5999):
+        #     row["province"] = "Namur"
+        # elif (row["locality"] >= 6000 & row["locality"] <= 6599):
+        #     row["province"] = "Hainaut"
+        # elif (row["locality"] >= 6600 & row["locality"] <= 6999):
+        #     row["province"] = "Luxembourg"
+        # elif (row["locality"] >= 7000 & row["locality"] <= 7999):
+        #     row["province"] = "Hainaut"
+        # elif (row["locality"] >= 8000 & row["locality"] <= 8999):
+        #     row["province"] = "West Flanders"
+        # elif (row["locality"] >= 9000 & row["locality"] <= 9999):
+        #     row["province"] = "East Flanders"
+
+        return df
+
+def rename_column_titles(df):
+    df = df.rename(columns={'Price [€]': 'price',
+                            'Area [m²]': 'area',
+                            'locality [zip code]': 'locality',
+                            'surface of the land [m²]': 'surface of the land',
+                            'terrace surface [m²]': 'terrace surface',
+                            'garden surface [m²]': 'garden surface'})
+
+    return df
+
+
+def print_duplicate_houses(df):
+    print(df.duplicated().value_counts())
+    print(df.duplicated(['locality',
+                         'price',
+                         'number of bedrooms',
+                         'surface of the land']).value_counts())
+
+
+def drop_duplicate_columns(df):
+    # choice of columns to decide which properties are duplicates
+    df.drop_duplicates(subset=['locality',
+                               'price',
+                               'number of bedrooms',
+                               'surface of the land'], keep=False)
+    return df
+
+
+def strip_strings(df):
+    # strip strings
+    columns_to_strip = ['state of the building',
+                        'fully equipped kitchen',
+                        'type of property',
+                        'subtype of property']
+    df[columns_to_strip].apply(lambda x: x.str.strip())  # TODO x
+
+
+def convert_price_from_string_to_int(df):
+    # convert columns dtypes
+    df.drop(houses_copy.index[houses_copy["price"] == "no"], inplace=True)
+    df.price = houses_copy.price.astype(int)
+    return df.price
+
+
+def print_column_values(df, column):
+    print("possible values in ", column, df[column].unique())
+
+
+def print_column_na_count(df, column):
+    print("null count column", column, df[column].isnull().sum())
+
+
+def print_ratio_without_null(df, column):
+    print("ratio without null: ", end=' ')
+    print(houses_copy['area'].value_counts(normalize=True) * 100)
+
+
+def show_lmplot(x_value, y_value, data_value, hue_value):
+    sns.lmplot(x_value, y_value, data_value, hue_value, fit_reg=False)
+    # sns.lmplot(x='price', y='area',data=houses_copy, hue='state of the building')
+    plt.show()
+
+
+houses_copy = rename_column_titles(houses_copy)
+houses_copy = make_postal_code_qualitative_value(houses_copy)
+# print(houses_copy.columns)
+print(houses_copy['province'].head())
+print(print_column_values(houses_copy, 'province'))
+print(houses_copy.groupby('province').count())
+# print_duplicate_houses(houses_copy)
+houses_copy = drop_duplicate_columns(houses_copy)
+strip_strings(houses_copy)
+convert_price_from_string_to_int(houses_copy)
 # houses_copy.info()
+# print(houses_copy.price)
+# print(np.where(pd.isnull(houses_copy.price)))
+# print_column_values(houses_copy, 'state of the building')
+# print_column_na_count(houses_copy, 'state of the building')
 
-# strip strings
-columns_to_strip = ['state of the building',
-                    'fully equipped kitchen',
-                    'type of property',
-                    'subtype of property']
-houses_copy[columns_to_strip].apply(lambda x: x.str.strip())  # TODO x
+# print_column_values(houses_copy, 'area')
+# print_column_na_count(houses_copy, 'area')
+# print_ratio_without_null(houses_copy, 'area')
 
-#
-# print(houses_copy[columns_to_strip])
-#
-# print(houses_copy.dtypes)
-#
-# convert columns dtypes
-# convert_price_str_float = houses_copy['Price [€]'].astype(str).astype(float)
-# houses_copy = houses_copy.to_numeric(houses_copy['Price [€]'])
-
-# # houses_copy.to_numeric(houses_copy['price'])
-# houses_copy = houses_copy.convert_dtypes()
-# houses_copy["price"] = houses_copy.drop(houses_copy.index[houses_copy["price"] == "no"], inplace=True)
-houses_copy.drop(houses_copy.index[houses_copy["price"] == "no"], inplace=True)
-houses_copy.price = houses_copy.price.astype(int)
-
-houses_copy.info()
-
-print(houses_copy.price)
-print(np.where(pd.isnull(houses_copy.price)))
-
-print(houses_copy['state of the building'].unique())
-
-
-# how many nulls in the column area, what to do with the null values?
-# print(houses_copy['area'].isnull().sum())
-# print(houses_copy['area'].value_counts(normalize=True) * 100)
-
-# amount nulls in state of the building, not that important
-# convert to numbers to be able to see correlation / plot
-print(houses_copy['state of the building'].isnull().sum())
-
-# how many nulls in the column state of the building
-# print(houses_copy['state of the building'].isnull().sum())
-
+# amount nulls in state of the building, not that important. Or graph shows otherwise
 # KEEP THIS PLOT: shows the impact of state of the building on house price
-# sns.lmplot(x='price', y='area',data=houses_copy, hue='state of the building', fit_reg=False)
-# sns.lmplot(x='price', y='area',data=houses_copy, hue='state of the building')
+# show_lmplot('price', 'area', houses_copy, 'state of the building')
 
-# g = sns.catplot(x='price',
-#                 y='area',
-#                 data=houses_copy,
-#                 hue='state of the building')  # Color by stage
-#                 # col='Stage',  # Separate by stage
-#                 # kind='swarm') # Swarmplot
-
+# sns.pairplot(houses_copy)
 
 # facades not that important on price
 # sns.lmplot(x='price', y='number of facades',data=houses_copy)
@@ -95,20 +147,11 @@ print(houses_copy['state of the building'].isnull().sum())
 # bedrooms: not the most important one, but it seems to have some impact, up to five rooms
 # sns.lmplot(x='price', y='number of bedrooms',data=houses_copy)
 
-#
-# sns.lmplot(x='locality', y='price',data=houses_copy, hue='state of the building')
-# sns.catplot(x='locality', y='price',
-#             data=houses_copy,
-#             hue='state of the building',
-#             col='state of the building',
-#             kind='swarm')
-
-# sns.swarmplot(x='price', y='locality', data=houses_copy,
-#               hue='state of the building')
-
+# work locality first
 # sns.barplot(x='locality', y='price', data=houses_copy, hue='state of the building')
-
 # sns.lmplot(x='fully equipped kitchen', y='state of the building',data=houses_copy)
+
+# print(houses_copy['subtype of property'].unique())
 
 # percentage of the values
 # print(houses_copy['state of the building'].value_counts(normalize=True) * 100)
@@ -116,7 +159,7 @@ print(houses_copy['state of the building'].isnull().sum())
 # print(houses_copy.tail())
 # houses_pairplot = sns.pairplot(houses_copy)
 
-
+# print(houses_copy[['subtype of property']].value_counts())
 
 
 # max prices by area
@@ -126,4 +169,13 @@ print(houses_copy['state of the building'].isnull().sum())
 # correlation heatmap
 # corr = houses_copy.corr()
 # sns.heatmap(corr)
-plt.show()
+# plt.show()
+
+# print(houses_copy.dtypes)
+
+houses_copy = houses_copy[houses_copy['subtype of property'] == 'house']
+
+############### KEEP HOUSES ################
+subtype_house_copy = houses_copy[houses_copy['subtype of property'] == 'house']
+# print(subtype_house_copy.head())
+# print(subtype_house_copy.shape)
