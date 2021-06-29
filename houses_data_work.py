@@ -9,9 +9,14 @@ path = 'Dataset\\final_list_houses_dataset.csv'
 houses_data = pd.read_csv(path, sep=',')
 # copy dataframe
 houses_copy = houses_data.copy()
+# print(houses_copy.columns)
 print(houses_copy.columns)
-
-houses_copy = houses_copy.drop(columns='Unnamed: 0')
+houses_copy = houses_copy.drop(columns=['Unnamed: 0',
+                                        'open fire',
+                                        'type of property'])
+print(houses_copy.columns)
+                                        # 'type of property',
+                                        # 'open fire'])
 # del houses_copy[houses_copy['type of property']]
 # houses_copy = houses_copy.drop(columns='open fire')
 
@@ -134,7 +139,7 @@ def strip_strings(df):
     # strip strings
     columns_to_strip = ['state of the building',
                         'fully equipped kitchen',
-                        'type of property',
+                        # 'type of property',
                         'subtype of property']
     df[columns_to_strip].apply(lambda x: x.str.strip())  # TODO x
 
@@ -169,6 +174,7 @@ def show_lmplot(x_value, y_value, data_value, hue_value):
 houses_copy = rename_column_titles(houses_copy)
 # houses_copy = make_postal_code_qualitative_value(houses_copy)
 houses_copy = add_cities_provinces_to_dataset(houses_copy)
+# houses_copy.info()
 
 
 # houses_copy = make_postal_code_second_attempt(houses_copy)
@@ -232,7 +238,7 @@ convert_price_from_string_to_int(houses_copy)
 
 # print(houses_copy.dtypes)
 
-houses_copy = houses_copy[houses_copy['subtype of property'] == 'house']
+# houses_copy = houses_copy[houses_copy['subtype of property'] == 'house']
 
 ############### KEEP HOUSES ################
 subtype_house_copy = houses_copy[houses_copy['subtype of property'] == 'house']
@@ -240,3 +246,30 @@ subtype_house_copy = houses_copy[houses_copy['subtype of property'] == 'house']
 # print(subtype_house_copy.shape)
 
 subtype_house_copy.info()
+print(subtype_house_copy.shape)
+print(subtype_house_copy.head())
+print(subtype_house_copy.tail())
+
+
+def show_heatmap_subtypehouse():
+    plt.figure(figsize=(12, 15))
+    copy = subtype_house_copy.copy()
+    copy = copy.drop(columns='locality')
+    corr = copy.corr()
+    sns.heatmap(corr)
+    plt.show()
+
+# show_heatmap_subtypehouse()
+
+def plot_price_by_area(x_val, y_val, data_val, hue_val):
+    sns.lmplot(x=x_val, y=y_val, data=data_val, hue=hue_val)
+    plt.show()
+
+plot_price_by_area('area', 'price', subtype_house_copy, 'city')
+# plot_price_by_area('area', 'price', subtype_house_copy, hue='province')
+# sns.lmplot(x=x_val, y=y_val, data=data_val, hue=hue_val)
+
+
+# def show_
+
+# print(houses_copy.locality)
