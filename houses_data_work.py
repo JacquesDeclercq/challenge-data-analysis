@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 from Creating_state_city_columns import add_cities_provinces_to_dataset
 
-path = 'Dataset\\final_list_houses_dataset.csv'
+path = 'Dataset//final_list_houses_dataset.csv'
 houses_data = pd.read_csv(path, sep=',')
 # copy dataframe
 houses_copy = houses_data.copy()
@@ -211,9 +211,9 @@ def plot_price_by_area(x_val, y_val, data_val, hue_val):
     sns.lmplot(x=x_val, y=y_val, data=data_val, hue=hue_val)
     plt.show()
 
-def show_barplot(x_val, y_val, data_val, hue_value=None):
+def show_barplot(x_val, y_val, data_val, hue_value=None, hue_order_list=None):
     plt.figure(figsize=(20, 5))
-    sns.barplot(x=x_val, y=y_val, data=data_val, palette="Blues", hue=hue_value)
+    sns.barplot(x=x_val, y=y_val, data=data_val, palette="Blues", hue=hue_value, hue_order=hue_order_list)
     plt.xlabel(str(x_val))
     plt.ylabel(str(y_val))
     plt.show()
@@ -242,7 +242,7 @@ def show_barplot_stats():
                   y='province',
                   data=subtype_house_copy)
 
-def show_barplot_typeofsubproperty_absoluteprice():
+def show_barplot_typeofsubproperty_absoluteprice_region():
     list_properties = ['house', 'apartment', 'villa']
     copy_df = houses_copy[houses_copy['subtype of property'].isin(list_properties)]
     sns.barplot(x='region', y='price', data=copy_df, hue="subtype of property", palette="Blues")
@@ -251,7 +251,7 @@ def show_barplot_typeofsubproperty_absoluteprice():
     # plt.ylabel("Price")
     plt.show()
 
-def show_barplot_typeofsubproperty_pricespermeter():
+def show_barplot_typeofsubproperty_pricespermeter_region():
     #price based on type of property and region
     # ax = plt.subplot()
     list_properties = ['house', 'apartment', 'villa']
@@ -261,6 +261,21 @@ def show_barplot_typeofsubproperty_pricespermeter():
     # plt.xlabel("Type of property")
     # plt.ylabel("Price")
     plt.show()
+
+
+def show_barplot_pricespermeter_region():
+    #price based on type of property and region
+    # ax = plt.subplot()
+    list_properties = ['house', 'apartment', 'villa']
+    copy_df = houses_copy[houses_copy['subtype of property'].isin(list_properties)]
+    sns.barplot(x='region', y='price_meter', data=copy_df, palette="Blues")
+    # ax.set_xticklabels(["Appartment", "House"])
+    # plt.xlabel("Type of property")
+    # plt.ylabel("Price")
+    plt.show()
+
+
+
 
 
 def calculate_min_price_per_meter():
