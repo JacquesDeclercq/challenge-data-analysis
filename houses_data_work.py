@@ -265,11 +265,38 @@ def plot_price_by_area(x_val, y_val, data_val, hue_val):
     sns.lmplot(x=x_val, y=y_val, data=data_val, hue=hue_val)
     plt.show()
 
-plot_price_by_area('area', 'price', subtype_house_copy, 'city')
-# plot_price_by_area('area', 'price', subtype_house_copy, hue='province')
-# sns.lmplot(x=x_val, y=y_val, data=data_val, hue=hue_val)
+def show_barplot(x_val, y_val, data_val, hue_value=None):
+    plt.figure(figsize=(20, 5))
+    sns.barplot(x=x_val, y=y_val, data=data_val, palette="Blues", hue=hue_value)
+    plt.xlabel(str(x_val))
+    plt.ylabel(str(y_val))
+    plt.show()
+
+def show_boxplot(data_val):
+    plt.figure(figsize=(20, 5))
+    sns.boxplot(data=data_val)
+    plt.show()
 
 
-# def show_
+def show_boxplot_xaxis(column):
+    plt.figure(figsize=(5, 20))
+    copy_df = subtype_house_copy[column]
+    sns.boxplot(data=copy_df)
+    plt.xlabel(str(column))
+    plt.show()
+
+
+def show_barplot_stats():
+    mean = round(subtype_house_copy.price.mean(),2)
+    max = round(subtype_house_copy.price.max(),2)
+    min = round(subtype_house_copy.price.min(),2)
+    print(mean, max, min)
+
+    sns.countplot(x='price',
+                  y='province',
+                  data=subtype_house_copy)
+
+# show_barplot_stats()
+
 
 # print(houses_copy.locality)
