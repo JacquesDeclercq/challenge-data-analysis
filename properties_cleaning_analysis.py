@@ -158,4 +158,9 @@ def calculate_price_per_meter():
     # print(max)
 
 
-calculate_price_per_meter()
+# calculate_price_per_meter()
+pd.set_option('display.max_columns', None)
+# print(normal_properties_data.groupby('region').describe())
+# print(normal_properties_data.groupby('region').max('price'))
+# print(properties_data_copy.groupby('region').describe())
+

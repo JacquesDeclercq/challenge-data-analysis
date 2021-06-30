@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 from properties_cleaning_analysis import *
 
 def show_heatmap_subtypehouse():
@@ -16,6 +18,7 @@ def plot_price_by_area(x_val, y_val, data_val, hue_val):
 
 def show_barplot(x_val, y_val, data_val, hue_value=None, hue_order_list=None):
     plt.figure(figsize=(20, 5))
+    plt.title('prices by region (prices below € 750.000)')
     sns.barplot(x=x_val, y=y_val, data=data_val, palette="Blues", hue=hue_value, hue_order=hue_order_list)
     plt.xlabel(str(x_val))
     plt.ylabel(str(y_val))
@@ -51,9 +54,8 @@ def show_barplot_typeofsubproperty_absoluteprice_region():
     list_properties = ['house', 'apartment', 'villa']
     copy_df = properties_data_copy[properties_data_copy['subtype of property'].isin(list_properties)]
     sns.barplot(x='region', y='price', data=copy_df, hue="subtype of property", palette="Blues")
-    # ax.set_xticklabels(["Appartment", "House"])
-    # plt.xlabel("Type of property")
-    # plt.ylabel("Price")
+    plt.ylabel('price in millions')
+    plt.title('prices per property type per region')
     plt.show()
 
 
@@ -74,8 +76,10 @@ def show_barplot_pricespermeter_region():
     # ax = plt.subplot()
     list_properties = ['house', 'apartment', 'villa']
     copy_df = properties_data_copy[properties_data_copy['subtype of property'].isin(list_properties)]
-    sns.barplot(x='region', y='price_meter', data=copy_df, palette="Blues")
-    # ax.set_xticklabels(["Appartment", "House"])
-    # plt.xlabel("Type of property")
-    # plt.ylabel("Price")
+    sns.barplot(x='region', y='price_meter', data=copy_df, palette="Blues",
+                hue="subtype of property", hue_order=[  'apartment',
+                                                        'house',
+                                                        'villa'])
+    plt.ylabel("price per square meter")
+    plt.title('price per square meter for property types and region')
     plt.show()
