@@ -2,10 +2,10 @@
 Immo Eliza Price Model 
 
 ## Contributors
--Jacques Declerq
--Maarten Van den Bulcke
--Leonor Drummond
--Hoang Minh Nguyen
+-Jacques Declerq.
+-Maarten Van den Bulcke.
+-Leonor Drummond.
+-Hoang Minh Nguyen.
 
 ## Description
 use of file(from scraping 'immoweb'last time):
@@ -16,14 +16,14 @@ to analyse the situation of the real estate mark in Belgium. This DataFrame shou
 
 ## Methode
 -drop columns that we will not use for general overview.
--drop properties with missing area values    
--add columns to work regionally
--cleaning data
--convert_price_from_string_to_float(properties_data_copy)
--take a look at 'not specified' state of the building
--seperate the normal from the rich at 750.000
--exclude area outlier
--make different plots to explore the data
+-drop properties with missing area values.    
+-add columns to work regionally.
+-cleaning data.
+-convert_price_from_string_to_float(properties_data_copy).
+-take a look at 'not specified' state of the building.
+-seperate the normal from the rich at 750.000.
+-exclude area outlier.
+-make different plots to explore the data.
 
 ## Time line
 1. Create the repository
