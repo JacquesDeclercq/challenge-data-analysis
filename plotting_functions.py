@@ -18,7 +18,7 @@ def plot_price_by_area(x_val, y_val, data_val, hue_val):
 
 def show_barplot(x_val, y_val, data_val, hue_value=None, hue_order_list=None):
     plt.figure(figsize=(20, 5))
-    plt.title('prices by region (prices below € 750.000)')
+    plt.title('prices by bedrooms (prices below € 750.000)')
     sns.barplot(x=x_val, y=y_val, data=data_val, palette="Blues", hue=hue_value, hue_order=hue_order_list)
     plt.xlabel(str(x_val))
     plt.ylabel(str(y_val))
