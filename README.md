@@ -14,6 +14,10 @@ use of file(from scraping 'immoweb'last time):
 
 to analyse the situation of the real estate market in Belgium. This DataFrame should uses later for the real estate market modelisation.
 
+## Visual samples
+![heatmap] (https://github.com/JacquesDeclercq/challenge-data-analysis/blob/main/Visuals/final/heatmap.png)
+
+
 ## Methode
 1. Drop columns that weren't use for general overview.
 2. Drop properties with missing area values.    
