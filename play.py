@@ -7,6 +7,8 @@ from plot_keeper import *
 #TODO   columns we do not use: loose?
 #TODO   outliers? normalise ~ displot?
 #TODO   explain redundant info: locality=city -> region, province // area,price -> price_meter
+#TODO   presentation
+#TODO   README.md
 # colors
 # creative questions
 
