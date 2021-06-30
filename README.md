@@ -12,7 +12,7 @@ use of file(from scraping 'immoweb'last time):
 
 'Dataset//final_list_houses_dataset.csv' 
 
-to analyse the situation of the real estate mark in Belgium. This DataFrame should uses later for the real estate mark modelisation.
+to analyse the situation of the real estate market in Belgium. This DataFrame should uses later for the real estate market modelisation.
 
 ## Methode
 1. Drop columns that we will not use for general overview.
