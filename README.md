@@ -2,10 +2,10 @@
 Immo Eliza Price Model 
 
 ## Contributors
--Jacques Declerq.
--Maarten Van den Bulcke.
--Leonor Drummond.
--Hoang Minh Nguyen.
+1. Jacques Declerq.
+2. Maarten Van den Bulcke.
+3. Leonor Drummond.
+4. Hoang Minh Nguyen.
 
 ## Description
 use of file(from scraping 'immoweb'last time):
