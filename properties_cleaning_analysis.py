@@ -52,7 +52,7 @@ def convert_price_from_string_to_float(df):
     # convert columns dtypes
     df.drop(properties_data_copy.index[properties_data_copy["price"] == "no"], inplace=True)
     df.price = properties_data_copy.price.astype(float)
-    return df.price
+    # return df.price
 
 
 def print_column_values(df, column):
@@ -81,16 +81,16 @@ def add_price_per_square_meter(df):
     return df
 
 
-
-
-
 # copy dataframe
 properties_data_copy = properties_data.copy()
-
 properties_data_copy = rename_column_titles(properties_data_copy)
+convert_price_from_string_to_float(properties_data_copy)
+
 # drop columns that we will not use for general overview.
 # We can return to original dataset when we want to add bonuses
 # print(houses_copy.isnull().sum())
+
+
 properties_data_copy_heatmap = properties_data_copy.drop(columns=['Unnamed: 0'])
 
 
@@ -104,8 +104,8 @@ properties_data_copy = properties_data_copy.drop(columns=['garden surface',
                                         'furnished',
                                         'swimming pool',
                                         'garden',
-                                        'terrace',
-                                        'number of bedrooms'])
+                                        'terrace'])
+                                        # 'number of bedrooms'])
 
 # drop properties with missing area values
 properties_data_copy.dropna(subset=['area'], inplace=True)
@@ -115,7 +115,7 @@ properties_data_copy = add_cities_provinces_to_dataset(properties_data_copy)
 # cleaning data
 properties_data_copy = drop_duplicate_columns(properties_data_copy)
 strip_strings(properties_data_copy)
-convert_price_from_string_to_float(properties_data_copy)
+# convert_price_from_string_to_float(properties_data_copy)
 properties_data_copy = add_price_per_square_meter(properties_data_copy)
 
 # take a look at 'not specified' state of the building
